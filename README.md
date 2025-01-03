@@ -1,6 +1,28 @@
-# Getting Started with Create React App
+# full-stack-web-development-frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## アプリケーションを作成する
+
+```bash
+yarn create react-app frontend --template typescript
+```
+
+## ホットリロード対応
+
+_package.json_
+
+```json
+{
+  "scripts": {
+    "start": "WATCHPACK_POLLING=true react-scripts start"
+  }
+}
+```
+
+## アプリケーションを起動する
+
+```bash
+yarn start
+```
 
 ## Available Scripts
 
