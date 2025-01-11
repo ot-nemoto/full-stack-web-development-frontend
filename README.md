@@ -2,13 +2,13 @@
 
 ## アプリケーションを作成する
 
-```bash
+```sh
 yarn create next-app frontend --src-dir --yes
 ```
 
 ## devcontainer ホットリロード対応
 
-```bash
+```json
 {
   "scripts": {
     "dev": "WATCHPACK_POLLING=true next dev"
