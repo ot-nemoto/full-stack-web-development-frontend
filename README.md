@@ -6,7 +6,17 @@
 yarn create next-app frontend --src-dir --yes
 ```
 
-## devcontainer ホットリロード対応
+> yarn はデフォルトでは最新のバージョンのテンプレートを使用するので、以下のコマンドで環境を合わせる。<br>
+> この場合 `yarn create next-app` コマンドは不要。
+>
+> ```sh
+> npx create-next-app@15.1.4 frontend --src-dir --use-yarn --yes
+> ```
+
+## ホットリロード対応
+
+devcontainer 環境の場合、ソースコードの変更を検知出来ない場合があるため、WATCHPACK_POLLING 環境変数を設定。<br>
+また、turbopack によるビルドでは検知できなかったため、無効（webpack）で実行させるように設定を変更。
 
 ```json
 {
