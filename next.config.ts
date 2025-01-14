@@ -1,7 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/products',
+        permanent: true, // 永続的なリダイレクト（301）
+      },
+    ];
+  },
 };
 
 export default nextConfig;
