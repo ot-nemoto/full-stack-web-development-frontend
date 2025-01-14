@@ -1,16 +1,40 @@
 # full-stack-web-development-frontend
 
+```sh
+yarn --version
+  # 1.22.22
+npx --version
+  # 10.9.0
+node --version
+  # v22.12.0
+```
+
 ## アプリケーションを作成する
 
 ```sh
-yarn create next-app frontend --src-dir --yes
+yarn create next-app frontend
+✔ Would you like to use TypeScript? … No / [Yes]
+✔ Would you like to use ESLint? … No / [Yes]
+✔ Would you like to use Tailwind CSS? … No / [Yes]
+✔ Would you like your code inside a `src/` directory? … No / [Yes]
+✔ Would you like to use App Router? (recommended) … No / [Yes]
+✔ Would you like to use Turbopack for `next dev`? … [No] / Yes
+✔ Would you like to customize the import alias (`@/*` by default)? … [No] / Yes
 ```
 
-> yarn はデフォルトでは最新のバージョンのテンプレートを使用するので、以下のコマンドで環境を合わせる。<br>
-> この場合 `yarn create next-app` コマンドは不要。
+> - yarn はデフォルトでは最新のバージョンのテンプレートを使用する
+> - タイミングによってバージョンの変更により構成が変わることもあるので、今回は `npx create-next-app` で環境を合わせる。
+> - この場合 `yarn create next-app frontend` の実行は不要
 >
 > ```sh
-> npx create-next-app@15.1.4 frontend --src-dir --use-yarn --yes
+> npx create-next-app@15.1.4 frontend --use-yarn
+> ✔ Would you like to use TypeScript? … No / [Yes]
+> ✔ Would you like to use ESLint? … No / [Yes]
+> ✔ Would you like to use Tailwind CSS? … No / [Yes]
+> ✔ Would you like your code inside a `src/` directory? … No / [Yes]
+> ✔ Would you like to use App Router? (recommended) … No / [Yes]
+> ✔ Would you like to use Turbopack for `next dev`? … [No] / Yes
+> ✔ Would you like to customize the import alias (`@/*` by default)? … [No] / Yes
 > ```
 
 ## ホットリロード対応
