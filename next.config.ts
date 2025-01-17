@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/',
-        destination: '/products',
+        destination: '/industry/products',
         permanent: true, // 永続的なリダイレクト（301）
       },
     ];
