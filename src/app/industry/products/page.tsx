@@ -10,6 +10,7 @@ export default function Page() {
             <th>単価</th>
             <th>説明</th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -19,6 +20,9 @@ export default function Page() {
             <td>6900</td>
             <td>
               大人の愛らしさを引き立てる、ナチュラルな風合い。リラックスxトレンドを楽しめる、上品なティアードワンピース。
+            </td>
+            <td>
+              <a href="/industry/products/1">在庫処理</a>
             </td>
             <td>
               <button>更新・削除</button>
@@ -32,6 +36,9 @@ export default function Page() {
               しなやかな肌触りが心地よい、程よいフィット感のカットソー。ビジネスカジュアルにも普段使いにも使える、ベーシックなデザイン。
             </td>
             <td>
+              <a href="/industry/products/2">在庫処理</a>
+            </td>
+            <td>
               <button>更新・削除</button>
             </td>
           </tr>
@@ -41,6 +48,9 @@ export default function Page() {
             <td>5980</td>
             <td>
               定番のデニムパンツに、フェミニンなベルトをプラスしたスタイリッシュなアイテム。カジュアルにもきれいめにも合わせやすい。
+            </td>
+            <td>
+              <a href="/industry/products/3">在庫処理</a>
             </td>
             <td>
               <button>更新・削除</button>
