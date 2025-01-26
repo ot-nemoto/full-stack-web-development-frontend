@@ -32,6 +32,9 @@ export default function Page() {
 
   return (
     <>
+      <header className="flex items-center justify-between mb-4">
+        ヘッダー
+      </header>
       <h2 className="text-2xl font-bold mb-4">商品一覧</h2>
       <button className="bg-green-500 text-white py-2 px-4 rounded mb-4">
         商品を追加する
