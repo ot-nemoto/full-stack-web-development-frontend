@@ -31,40 +31,45 @@ export default function Page() {
   ];
 
   return (
-    <>
-      <header className="flex items-center justify-between mb-4">
-        ヘッダー
+    <div className="flex flex-col min-h-screen">
+      <header className="bg-blue-500 text-white text-lg font-bold py-4 px-6 flex justify-between items-center">
+        在庫管理システム
       </header>
-      <h2 className="text-2xl font-bold mb-4">商品一覧</h2>
-      <button className="bg-green-500 text-white py-2 px-4 rounded mb-4">
-        商品を追加する
-      </button>
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr className="bg-gray-200 text-black">
-            <th className="py-2 px-4 border-b">商品ID</th>
-            <th className="py-2 px-4 border-b">商品名</th>
-            <th className="py-2 px-4 border-b">単価</th>
-            <th className="py-2 px-4 border-b">説明</th>
-            <th className="py-2 px-4 border-b"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="hover:bg-gray-50">
-              <td className="py-2 px-4 border-b">{product.id}</td>
-              <td className="py-2 px-4 border-b">{product.name}</td>
-              <td className="py-2 px-4 border-b">{product.price}</td>
-              <td className="py-2 px-4 border-b">{product.description}</td>
-              <td className="py-2 px-4 border-b">
-                <button className="bg-blue-500 text-white py-1 px-3 rounded mr-2">
-                  編集
-                </button>
-              </td>
+      <main className="flex-grow p-4">
+        <h2 className="text-2xl font-bold mb-4">商品一覧</h2>
+        <button className="bg-green-500 text-white py-2 px-4 rounded mb-4">
+          商品を追加する
+        </button>
+        <table className="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr className="bg-gray-200 text-black">
+              <th className="py-2 px-4 border-b">商品ID</th>
+              <th className="py-2 px-4 border-b">商品名</th>
+              <th className="py-2 px-4 border-b">単価</th>
+              <th className="py-2 px-4 border-b">説明</th>
+              <th className="py-2 px-4 border-b"></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+          </thead>
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b">{product.id}</td>
+                <td className="py-2 px-4 border-b">{product.name}</td>
+                <td className="py-2 px-4 border-b">{product.price}</td>
+                <td className="py-2 px-4 border-b">{product.description}</td>
+                <td className="py-2 px-4 border-b">
+                  <button className="bg-blue-500 text-white py-1 px-3 rounded mr-2">
+                    編集
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </main>
+      <footer className="bg-blue-500 text-white text-sm py-4 text-center mt-auto">
+        &copy; 2023 full stack web development
+      </footer>
+    </div>
   );
 }
