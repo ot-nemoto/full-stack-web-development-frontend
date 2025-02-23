@@ -1,34 +1,13 @@
-const Main = () => {
-  const products = [
-    {
-      id: 1,
-      name: 'コットン100%バックリボンティアードワンピース（黒）',
-      price: 6900,
-      description:
-        '大人の愛らしさを引き立てる、ナチュラルな風合い。リラックスxトレンドを楽しめる、上品なティアードワンピース。',
-    },
-    {
-      id: 2,
-      name: 'ライトストレッチカットソー（ネイビー）',
-      price: 2980,
-      description:
-        'しなやかな肌触りが心地よい、程よいフィット感のカットソー。ビジネスカジュアルにも普段使いにも使える、ベーシックなデザイン。',
-    },
-    {
-      id: 3,
-      name: 'ベルト付きデニムパンツ（ブルー）',
-      price: 5980,
-      description:
-        '定番のデニムパンツに、フェミニンなベルトをプラスしたスタイリッシュなアイテム。カジュアルにもきれいめにも合わせやすい。',
-    },
-    {
-      id: 4,
-      name: 'レースフレアスカート（ホワイト）',
-      price: 4980,
-      description:
-        'エレガントな雰囲気を醸し出すレーススカート。裏地付きで透け感も抑えられ、通年使えるおすすめアイテム。',
-    },
-  ];
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+};
+
+export default async function Main() {
+  const response = await fetch('http://localhost:3001/products');
+  const products = await response.json();
 
   return (
     <main className="flex-grow p-4">
@@ -47,7 +26,7 @@ const Main = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {products.map((product: Product) => (
             <tr key={product.id} className="hover:bg-gray-50">
               <td className="py-2 px-4 border-b">{product.id}</td>
               <td className="py-2 px-4 border-b">{product.name}</td>
@@ -64,6 +43,4 @@ const Main = () => {
       </table>
     </main>
   );
-};
-
-export default Main;
+}
