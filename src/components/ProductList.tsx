@@ -1,9 +1,11 @@
-type Product = {
+import Link from 'next/link';
+
+interface Product {
   id: number;
   name: string;
   price: number;
   description: string;
-};
+}
 
 export default async function ProductList() {
   const response = await fetch('http://localhost:3001/products');
@@ -19,6 +21,7 @@ export default async function ProductList() {
             <th className="py-2 px-4 border-b">商品名</th>
             <th className="py-2 px-4 border-b">単価</th>
             <th className="py-2 px-4 border-b">説明</th>
+            <th className="py-2 px-4 border-b"></th>
           </tr>
         </thead>
         <tbody>
@@ -28,6 +31,14 @@ export default async function ProductList() {
               <td className="py-2 px-4 border-b">{product.name}</td>
               <td className="py-2 px-4 border-b">{product.price}</td>
               <td className="py-2 px-4 border-b">{product.description}</td>
+              <td className="py-2 px-4 border-b">
+                <Link
+                  href={`/inventory/products/${product.id}`}
+                  className="text-blue-500 hover:text-blue-700 hover:underline"
+                >
+                  在庫処理
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>

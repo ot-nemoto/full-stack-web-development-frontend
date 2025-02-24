@@ -1,4 +1,8 @@
-type History = {
+interface InventoryHistoryProps {
+  id: number;
+}
+
+interface History {
   id: number;
   product_id: number;
   type: string;
@@ -7,16 +11,13 @@ type History = {
   quantity: number;
   totalPrice: number;
   inventory: number;
-};
+}
 
-export default async function InventoryHistory() {
+export default async function InventoryHistory({ id }: InventoryHistoryProps) {
   const response = await fetch(
-    'http://localhost:3001/inventories?product_id=1'
+    `http://localhost:3001/inventories?product_id=${id}&_sort=-date`
   );
-  const histories = (await response.json()).sort(
-    (a: History, b: History) =>
-      new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const histories = await response.json();
 
   return (
     <main className="flex-grow p-4">
