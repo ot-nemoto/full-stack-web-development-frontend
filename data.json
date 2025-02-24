@@ -28,15 +28,17 @@
   "inventories": [
     {
       "id": 1,
+      "product_id": 1,
       "type": "仕入れ",
       "date": "2023-04-03 18:54:17",
       "price": 6900,
-      "quantity": 2,
-      "totalPrice": 13800,
+      "quantity": 400,
+      "totalPrice": 2760000,
       "inventory": 400
     },
     {
       "id": 2,
+      "product_id": 1,
       "type": "卸し",
       "date": "2023-04-04 17:55:16",
       "price": 6900,
@@ -46,6 +48,7 @@
     },
     {
       "id": 3,
+      "product_id": 1,
       "type": "卸し",
       "date": "2023-04-05 16:56:15",
       "price": 6900,
@@ -55,6 +58,7 @@
     },
     {
       "id": 4,
+      "product_id": 1,
       "type": "仕入れ",
       "date": "2023-04-06 15:57:14",
       "price": 6900,
@@ -64,6 +68,7 @@
     },
     {
       "id": 5,
+      "product_id": 1,
       "type": "卸し",
       "date": "2023-04-07 14:58:13",
       "price": 6900,
