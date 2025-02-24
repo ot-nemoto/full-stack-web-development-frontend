@@ -50,6 +50,19 @@ devcontainer 環境の場合、ソースコードの変更を検知出来ない�
 }
 ```
 
+## API モック対応
+
+API のモックとして、json-server を利用。
+yarn で起動させるために、`package.json` に以下の設定を追加。
+
+```json
+{
+  "scripts": {
+    "json-server": "json-server --watch data.json --port 3001"
+  }
+}
+```
+
 ## Getting Started
 
 First, run the development server:
