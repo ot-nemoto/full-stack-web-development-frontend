@@ -1,4 +1,4 @@
-interface InventoryHistoryProps {
+interface StckHistoryProps {
   id: number;
 }
 
@@ -13,15 +13,15 @@ interface History {
   inventory: number;
 }
 
-export default async function InventoryHistory({ id }: InventoryHistoryProps) {
-  const response = await fetch(
-    `http://localhost:3001/inventories?product_id=${id}&_sort=-date`
-  );
-  const histories = await response.json();
+export default async function StckHistory({ id }: StckHistoryProps) {
+  const histories = await (
+    await fetch(
+      `http://localhost:3001/inventories?product_id=${id}&_sort=-date`
+    )
+  ).json();
 
   return (
-    <main className="flex-grow p-4">
-      <h2 className="text-2xl font-bold mb-4">商品在庫</h2>
+    <>
       <h3 className="text-xl font-bold mb-4">在庫履歴</h3>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
@@ -47,6 +47,6 @@ export default async function InventoryHistory({ id }: InventoryHistoryProps) {
           ))}
         </tbody>
       </table>
-    </main>
+    </>
   );
 }
