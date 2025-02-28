@@ -22,13 +22,10 @@ export default function StockHandler({ product }: { product: Product }) {
     const history = {
       product_id: product.id,
       type: eventType,
-      date: new Date().toISOString(),
-      price: product.price,
       quantity: quantity,
-      totalPrice: product.price * quantity,
     };
 
-    const res = await fetch('http://localhost:3001/inventories', {
+    const res = await fetch('http://localhost:3000/api/inventories', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
