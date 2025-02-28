@@ -9,7 +9,7 @@ interface Product {
   description: string;
 }
 
-export default function InventoryProcessing({ product }: { product: Product }) {
+export default function StockHandler({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(0);
   const [message, setMessage] = useState<string>('');
 

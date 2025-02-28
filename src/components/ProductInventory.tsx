@@ -1,4 +1,4 @@
-import InventoryProcessing from './InventoryProcessing';
+import StockHandler from './StockHandler';
 import StockHistory from './StockHistory';
 
 interface ProductInventoryProps {
@@ -13,7 +13,7 @@ export default async function ProductInventory({ id }: ProductInventoryProps) {
   return (
     <main className="flex-grow p-4">
       <h2 className="text-2xl font-bold mb-4">商品在庫</h2>
-      <InventoryProcessing product={product} />
+      <StockHandler product={product} />
       <StockHistory id={id} />
     </main>
   );
