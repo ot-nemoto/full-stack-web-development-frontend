@@ -15,9 +15,7 @@ interface History {
 
 export default async function StckHistory({ id }: StckHistoryProps) {
   const histories = await (
-    await fetch(
-      `http://localhost:3001/inventories?product_id=${id}&_sort=-date`
-    )
+    await fetch(`http://localhost:3000/api/inventories/${id}`)
   ).json();
 
   return (
