@@ -3,8 +3,6 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   const data = await request.json();
 
-  console.log(data);
-
   const products = await (
     await fetch(`http://localhost:3001/products?id=${data.product_id}`)
   ).json();
@@ -18,8 +16,6 @@ export async function POST(request: Request) {
       `http://localhost:3001/inventories?product_id=${data.product_id}&_sort=-date&_limit=1`
     )
   ).json();
-
-  console.log(inventoryHistory);
 
   const date = new Date();
   const formattedDate = date
@@ -63,8 +59,6 @@ export async function POST(request: Request) {
     totalPrice: products[0].price * data.quantity,
     inventory: inventory,
   };
-
-  console.log(history);
 
   const res = await fetch('http://localhost:3001/inventories', {
     method: 'POST',

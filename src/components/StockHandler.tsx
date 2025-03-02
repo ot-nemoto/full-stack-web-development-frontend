@@ -9,7 +9,15 @@ interface Product {
   description: string;
 }
 
-export default function StockHandler({ product }: { product: Product }) {
+interface StockHandlerProps {
+  product: Product;
+  onSuccess: () => void;
+}
+
+export default function StockHandler({
+  product,
+  onSuccess,
+}: StockHandlerProps) {
   const [quantity, setQuantity] = useState(0);
 
   const handleSubmit = async (eventType: string) => {
@@ -33,6 +41,7 @@ export default function StockHandler({ product }: { product: Product }) {
 
     if (res.ok) {
       alert('在庫処理が完了しました');
+      onSuccess(); // 在庫履歴を更新するためのコールバック関数を呼び出す
     } else {
       alert('エラーが発生しました');
     }
