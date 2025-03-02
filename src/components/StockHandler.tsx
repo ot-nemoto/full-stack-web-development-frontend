@@ -11,11 +11,9 @@ interface Product {
 
 export default function StockHandler({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(0);
-  const [message, setMessage] = useState<string>('');
 
   const handleSubmit = async (eventType: string) => {
     if (quantity <= 0) {
-      setMessage('数量は0より大きい整数でなければなりません');
       return;
     }
 
@@ -34,10 +32,9 @@ export default function StockHandler({ product }: { product: Product }) {
     });
 
     if (res.ok) {
-      setMessage(`登録成功！（${eventType}）`);
-      setQuantity(0);
+      alert('在庫処理が完了しました');
     } else {
-      setMessage('エラーが発生しました');
+      alert('エラーが発生しました');
     }
   };
 
@@ -83,7 +80,6 @@ export default function StockHandler({ product }: { product: Product }) {
             商品を卸す
           </button>
         </form>
-        {message && <p className="mt-4">{message}</p>}
       </div>
     </>
   );

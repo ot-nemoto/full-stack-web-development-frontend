@@ -8,7 +8,7 @@ interface Product {
 }
 
 export default async function ProductList() {
-  const response = await fetch('http://localhost:3001/products');
+  const response = await fetch('http://localhost:3000/api/products');
   const products = await response.json();
 
   return (

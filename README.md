@@ -9,25 +9,6 @@ node --version
   # v22.12.0
 ```
 
-## プロジェクト構成
-
-```mermaid
-graph TD;
-  商品一覧 --> Header
-  商品一覧 --> ProductList
-  商品一覧 --> Footer
-
-```
-
-```mermaid
-graph TD;
-  商品在庫 --> Header
-  商品在庫 --> ProductInventory
-  ProductInventory --> StockHandler
-  ProductInventory --> StockHistory
-  商品在庫 --> Footer
-```
-
 ## アプリケーションを作成する
 
 ```sh
@@ -90,4 +71,52 @@ yarn json-server
 
 ```sh
 yarn dev
+```
+
+### コンポーネント関連図
+
+**商品一覧**
+
+```mermaid
+graph TD;
+  page --> Header
+  page --> ProductList[ProductList<br>商品一覧]
+  page --> Footer
+
+```
+
+**商品在庫**
+
+```mermaid
+graph TD;
+  page --> Header
+  page --> ProductInventory[ProductInventory<br>商品在庫]
+  ProductInventory --> StockHandler[StockHandler<br>在庫処理]
+  ProductInventory --> StockHistory[StockHistory<br>在庫履歴]
+  page --> Footer
+```
+
+### 内部 API とモック API の関連図
+
+- 実際はバックエンド API と接続するが、開発環境においては、モック API を利用する。
+- 但し、バックエンド API とモック API とではインタフェースが異なる為、内部 API を介して接続させる。
+
+**本番環境**
+
+```mermaid
+sequenceDiagram
+  participant Frontend
+  participant BackendAPI
+  Frontend->>BackendAPI: /api/products
+```
+
+**開発環境**
+
+```mermaid
+sequenceDiagram
+  participant Frontend
+  participant InternalAPI
+  participant MockAPI
+  Frontend->>InternalAPI: /api/products
+  InternalAPI->>MockAPI: /products
 ```
