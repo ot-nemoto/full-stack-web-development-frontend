@@ -1,5 +1,5 @@
-interface StckHistoryProps {
-  id: number;
+interface StockHistoryProps {
+  histories: History[];
 }
 
 interface History {
@@ -13,11 +13,7 @@ interface History {
   inventory: number;
 }
 
-export default async function StckHistory({ id }: StckHistoryProps) {
-  const histories = await (
-    await fetch(`http://localhost:3000/api/inventories/${id}`)
-  ).json();
-
+export default function StockHistory({ histories }: StockHistoryProps) {
   return (
     <>
       <h3 className="text-xl font-bold mb-4">在庫履歴</h3>

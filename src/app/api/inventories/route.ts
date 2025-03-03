@@ -1,9 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
-  const data = await request.json();
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const productId = searchParams.get('productId');
 
-  console.log(data);
+  const response = await fetch(
+    `http://localhost:3001/inventories?product_id=${productId}&_sort=-date`
+  );
+  const inventories = await response.json();
+
+  return NextResponse.json(inventories, { status: 200 });
+}
+
+export async function POST(req: NextRequest) {
+  const data = await req.json();
 
   const products = await (
     await fetch(`http://localhost:3001/products?id=${data.product_id}`)
@@ -18,8 +28,6 @@ export async function POST(request: Request) {
       `http://localhost:3001/inventories?product_id=${data.product_id}&_sort=-date&_limit=1`
     )
   ).json();
-
-  console.log(inventoryHistory);
 
   const date = new Date();
   const formattedDate = date
@@ -63,8 +71,6 @@ export async function POST(request: Request) {
     totalPrice: products[0].price * data.quantity,
     inventory: inventory,
   };
-
-  console.log(history);
 
   const res = await fetch('http://localhost:3001/inventories', {
     method: 'POST',
