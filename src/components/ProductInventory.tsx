@@ -5,24 +5,28 @@ import StockHandler from './StockHandler';
 import StockHistory from './StockHistory';
 
 interface ProductInventoryProps {
-  id: number;
+  productId: number;
 }
 
-export default function ProductInventory({ id }: ProductInventoryProps) {
+export default function ProductInventory({ productId }: ProductInventoryProps) {
   const [product, setProduct] = useState(null);
   const [histories, setHistories] = useState([]);
 
   const fetchProduct = useCallback(async () => {
-    const response = await fetch(`http://localhost:3000/api/products/${id}`);
+    const response = await fetch(
+      `http://localhost:3000/api/products/${productId}`
+    );
     const data = await response.json();
     setProduct(data);
-  }, [id]);
+  }, [productId]);
 
   const fetchHistories = useCallback(async () => {
-    const response = await fetch(`http://localhost:3000/api/inventories/${id}`);
+    const response = await fetch(
+      `http://localhost:3000/api/inventories?productId=${productId}`
+    );
     const data = await response.json();
     setHistories(data);
-  }, [id]);
+  }, [productId]);
 
   useEffect(() => {
     fetchProduct();

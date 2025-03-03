@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <ProductInventory id={Number(id)} />
+      <ProductInventory productId={Number(id)} />
       <Footer />
     </div>
   );

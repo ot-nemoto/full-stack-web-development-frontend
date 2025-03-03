@@ -1,7 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
-  const data = await request.json();
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const productId = searchParams.get('productId');
+
+  const response = await fetch(
+    `http://localhost:3001/inventories?product_id=${productId}&_sort=-date`
+  );
+  const inventories = await response.json();
+
+  return NextResponse.json(inventories, { status: 200 });
+}
+
+export async function POST(req: NextRequest) {
+  const data = await req.json();
 
   const products = await (
     await fetch(`http://localhost:3001/products?id=${data.product_id}`)
