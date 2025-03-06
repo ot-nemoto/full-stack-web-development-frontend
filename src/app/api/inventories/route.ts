@@ -23,11 +23,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'Product not found' }, { status: 404 });
   }
 
-  const inventoryHistory = await (
-    await fetch(
+  // 最新の在庫情報を取得する関数
+  const getQuantityInStock = async () => {
+    const response = await fetch(
       `http://localhost:3001/inventories?product_id=${data.product_id}&_sort=-date&_limit=1`
-    )
-  ).json();
+    );
+    const inventories = await response.json();
+    return inventories.length > 0 ? inventories[0].inventory : 0;
+  };
 
   const date = new Date();
   const formattedDate = date
@@ -42,8 +45,7 @@ export async function POST(req: NextRequest) {
     })
     .replace(/\//g, '-');
 
-  let inventory =
-    inventoryHistory.length > 0 ? inventoryHistory[0].inventory : 0;
+  let inventory = await getQuantityInStock();
 
   switch (data.type) {
     case '仕入れ':
@@ -62,7 +64,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid type' }, { status: 400 });
   }
 
+  // 新しいIDを生成する関数
+  const generateNewId = async () => {
+    const response = await fetch(
+      'http://localhost:3001/inventories?_sort=-id&_limit=1'
+    );
+    const products = await response.json();
+    const maxId = products.length > 0 ? parseInt(products[0].id, 10) : 0;
+    return maxId + 1;
+  };
+
   const history = {
+    id: await generateNewId(),
     product_id: products[0].id,
     type: data.type,
     date: formattedDate,
@@ -81,7 +94,7 @@ export async function POST(req: NextRequest) {
   });
 
   if (res.ok) {
-    return NextResponse.json({ message: 'successful' }, { status: 200 });
+    return NextResponse.json(await res.json(), { status: 200 });
   }
   return NextResponse.json({ message: 'failed' }, { status: 400 });
 }
