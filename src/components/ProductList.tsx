@@ -55,32 +55,43 @@ export default function ProductList() {
     });
   };
   // 商品追加フォームの登録ボタンクリック時の処理
-  const handleRegisterClick = async () => {
-    const response = await fetch('http://localhost:3000/api/products', {
+  const handleRegisterClick = () => {
+    fetch('http://localhost:3000/api/products', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newProduct),
-    });
-
-    if (response.ok) {
-      const product = await response.json();
-      setProducts((prevProducts) => [...prevProducts, product]);
-      handleCancelClick(); // フォームをリセットして非表示にする
-    } else {
-      alert('商品登録に失敗しました');
-    }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('商品登録に失敗しました');
+        }
+        return response.json();
+      })
+      .then((product) => {
+        setProducts((prevProducts) => [...prevProducts, product]);
+        handleCancelClick(); // フォームをリセットして非表示にする
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await fetch('http://localhost:3000/api/products');
-      const products = await response.json();
-      setProducts(products);
-    };
-
-    fetchProducts();
+    fetch('http://localhost:3000/api/products')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('商品一覧の取得に失敗しました');
+        }
+        return response.json() as Promise<Product[]>;
+      })
+      .then((products) => {
+        setProducts(products);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   return (
