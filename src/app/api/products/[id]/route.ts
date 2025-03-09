@@ -5,12 +5,49 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = await params;
-  const response = await fetch(`http://localhost:3001/products?id=${id}`);
-  const product = await response.json();
+  try {
+    const response = await fetch(`http://localhost:3001/products/${id}`);
+    const product = await response.json();
+    if (product) {
+      return NextResponse.json(product, { status: 200 });
+    } else {
+      return NextResponse.json(
+        { message: 'Product not found' },
+        { status: 404 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: (error as Error).message },
+      { status: 500 }
+    );
+  }
+}
 
-  if (product.length > 0) {
-    return NextResponse.json(product[0], { status: 200 });
-  } else {
-    return NextResponse.json({ message: 'Product not found' }, { status: 404 });
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { id } = await params;
+  try {
+    const response = await fetch(`http://localhost:3001/products/${id}`, {
+      method: 'DELETE',
+    });
+    if (response.ok) {
+      return NextResponse.json(
+        { message: 'Product deleted successfully' },
+        { status: 200 }
+      );
+    } else {
+      return NextResponse.json(
+        { message: 'Failed to delete product' },
+        { status: 500 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
