@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     );
     const products = await response.json();
     const maxId = products.length > 0 ? parseInt(products[0].id, 10) : 0;
-    return maxId + 1;
+    return (maxId + 1).toString();
   };
 
   const product = {
