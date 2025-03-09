@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
 import Link from 'next/link';
 
 interface Product {
@@ -23,11 +22,20 @@ export default function ProductList() {
     price: 0,
     description: '',
   });
+  // 編集モードの管理
+  const [editProductId, setEditProductId] = useState<number | null>(null);
+  const [editProduct, setEditProduct] = useState<Product>({
+    id: null,
+    name: '',
+    price: 0,
+    description: '',
+  });
 
   // 商品追加ボタンクリック時の処理
   const handleAddProductClick = () => {
     setShowForm(true);
   };
+
   // 商品追加フォームの入力値変更時の処理
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,6 +44,7 @@ export default function ProductList() {
       [name]: value,
     }));
   };
+
   // 数値入力用の入力値変更時の処理
   const handleNumberInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,6 +53,7 @@ export default function ProductList() {
       [name]: Number(value), // 入力値を数値に変換
     }));
   };
+
   // 商品追加フォームのキャンセルボタンクリック時の処理
   const handleCancelClick = () => {
     setShowForm(false);
@@ -54,6 +64,7 @@ export default function ProductList() {
       description: '',
     });
   };
+
   // 商品追加フォームの登録ボタンクリック時の処理
   const handleRegisterClick = async () => {
     try {
@@ -99,6 +110,62 @@ export default function ProductList() {
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.id !== productId)
       );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 商品編集ボタンクリック時の処理
+  const handleEditClick = (product: Product) => {
+    setEditProductId(product.id);
+    setEditProduct(product);
+  };
+
+  // 商品編集フォームの入力値変更時の処理
+  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: value,
+    }));
+  };
+
+  // 商品編集フォームの数値入力値変更時の処理
+  const handleEditNumberInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setEditProduct((prevProduct) => ({
+      ...prevProduct,
+      [name]: Number(value), // 入力値を数値に変換
+    }));
+  };
+
+  // 商品編集フォームの保存ボタンクリック時の処理
+  const handleSaveClick = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/products/${editProductId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(editProduct),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('商品更新に失敗しました');
+      }
+
+      const updatedProduct = await response.json();
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === updatedProduct.id ? updatedProduct : product
+        )
+      );
+      setEditProductId(null); // 編集モードを解除
     } catch (error) {
       console.error(error);
     }
@@ -177,7 +244,7 @@ export default function ProductList() {
                   className="bg-green-500 text-white py-2 px-4 rounded"
                   onClick={handleRegisterClick}
                 >
-                  登録する
+                  登録
                 </button>
               </td>
               <td className="py-2 px-4 border-b">
@@ -192,26 +259,83 @@ export default function ProductList() {
           )}
           {products.map((product: Product) => (
             <tr key={product.id} className="hover:bg-gray-50">
-              <td className="py-2 px-4 border-b">{product.id}</td>
-              <td className="py-2 px-4 border-b">{product.name}</td>
-              <td className="py-2 px-4 border-b">{product.price}</td>
-              <td className="py-2 px-4 border-b">{product.description}</td>
-              <td className="py-2 px-4 border-b">
-                <Link
-                  href={`/inventory/products/${product.id}`}
-                  className="text-blue-500 hover:text-blue-700 hover:underline"
-                >
-                  在庫処理
-                </Link>
-              </td>
-              <td className="py-2 px-4 border-b">
-                <button
-                  className="bg-green-500 text-white py-2 px-4 rounded"
-                  onClick={() => handleDeleteClick(product.id)}
-                >
-                  削除
-                </button>
-              </td>
+              {editProductId === product.id ? (
+                <>
+                  <td className="py-2 px-4 border-b">{product.id}</td>
+                  <td className="py-2 px-4 border-b">
+                    <input
+                      type="text"
+                      name="name"
+                      value={editProduct.name}
+                      onChange={handleEditInputChange}
+                      className="border border-gray-300 rounded px-2 py-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <input
+                      type="number"
+                      name="price"
+                      value={editProduct.price}
+                      onChange={handleEditNumberInputChange}
+                      className="border border-gray-300 rounded px-2 py-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <input
+                      type="text"
+                      name="description"
+                      value={editProduct.description}
+                      onChange={handleEditInputChange}
+                      className="border border-gray-300 rounded px-2 py-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-green-500 text-white py-2 px-4 rounded"
+                      onClick={handleSaveClick}
+                    >
+                      保存
+                    </button>
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-gray-500 text-white py-2 px-4 rounded"
+                      onClick={() => setEditProductId(null)}
+                    >
+                      キャンセル
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className="py-2 px-4 border-b">{product.id}</td>
+                  <td className="py-2 px-4 border-b">{product.name}</td>
+                  <td className="py-2 px-4 border-b">{product.price}</td>
+                  <td className="py-2 px-4 border-b">{product.description}</td>
+                  <td className="py-2 px-4 border-b">
+                    <Link
+                      href={`/inventory/products/${product.id}`}
+                      className="text-blue-500 hover:text-blue-700 hover:underline"
+                    >
+                      在庫処理
+                    </Link>
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-yellow-500 text-white py-2 px-4 rounded"
+                      onClick={() => handleEditClick(product)}
+                    >
+                      編集
+                    </button>
+                    <button
+                      className="bg-red-500 text-white py-2 px-4 rounded"
+                      onClick={() => handleDeleteClick(product.id)}
+                    >
+                      削除
+                    </button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>
