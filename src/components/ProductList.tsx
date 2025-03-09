@@ -111,6 +111,7 @@ export default function ProductList() {
             <th className="py-2 px-4 border-b">単価</th>
             <th className="py-2 px-4 border-b">説明</th>
             <th className="py-2 px-4 border-b"></th>
+            <th className="py-2 px-4 border-b"></th>
           </tr>
         </thead>
         <tbody>
@@ -146,16 +147,18 @@ export default function ProductList() {
               </td>
               <td className="py-2 px-4 border-b">
                 <button
-                  className="bg-gray-500 text-white py-2 px-4 rounded"
-                  onClick={handleCancelClick}
-                >
-                  キャンセル
-                </button>
-                <button
                   className="bg-green-500 text-white py-2 px-4 rounded"
                   onClick={handleRegisterClick}
                 >
                   登録する
+                </button>
+              </td>
+              <td className="py-2 px-4 border-b">
+                <button
+                  className="bg-gray-500 text-white py-2 px-4 rounded"
+                  onClick={handleCancelClick}
+                >
+                  キャンセル
                 </button>
               </td>
             </tr>
