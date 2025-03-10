@@ -12,8 +12,10 @@ interface ProductInventoryProps {
 export default function ProductInventory({ productId }: ProductInventoryProps) {
   const [product, setProduct] = useState(null);
   const [histories, setHistories] = useState([]);
+
+  // Alertコンポーネントのための状態
+  const [message, setMessage] = useState<string | null>(null);
   const [severity, setSeverity] = useState<Severity>('info');
-  const [message, setMessage] = useState('');
   const [visible, setVisible] = useState(false);
 
   // productIdが変更されたときに商品情報を取得するCallBack関数を作成
@@ -42,7 +44,7 @@ export default function ProductInventory({ productId }: ProductInventoryProps) {
 
   // messageが変更されたときにvisibleを更新
   useEffect(() => {
-    setVisible(message !== '');
+    setVisible(message !== null && message.trim() !== '');
   }, [message]);
 
   if (!product) {

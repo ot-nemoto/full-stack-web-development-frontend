@@ -3,7 +3,7 @@ export type Severity = 'info' | 'warning' | 'error' | 'success';
 interface AlertProps {
   severity: Severity;
   children: React.ReactNode;
-  visible?: boolean; // visible プロパティを追加
+  visible?: boolean;
 }
 
 export default function Alert({

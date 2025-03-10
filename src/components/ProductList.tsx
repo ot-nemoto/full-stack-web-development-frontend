@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Alert, { Severity } from './Alert';
 
 interface Product {
   id: number | null;
@@ -30,6 +31,10 @@ export default function ProductList() {
     price: 0,
     description: '',
   });
+  // Alertコンポーネントのための状態
+  const [message, setMessage] = useState<string | null>(null);
+  const [severity, setSeverity] = useState<Severity>('info');
+  const [visible, setVisible] = useState(false);
 
   // 商品追加ボタンクリック時の処理
   const handleAddProductClick = () => {
@@ -83,6 +88,8 @@ export default function ProductList() {
       const product = await response.json();
       setProducts((prevProducts) => [...prevProducts, product]);
       handleCancelClick(); // フォームをリセットして非表示にする
+      setMessage('商品を登録しました');
+      setSeverity('success');
     } catch (error) {
       console.error(error);
     }
@@ -110,6 +117,8 @@ export default function ProductList() {
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.id !== productId)
       );
+      setMessage('商品を削除しました');
+      setSeverity('success');
     } catch (error) {
       console.error(error);
     }
@@ -166,6 +175,8 @@ export default function ProductList() {
         )
       );
       setEditProductId(null); // 編集モードを解除
+      setMessage('商品を更新しました');
+      setSeverity('success');
     } catch (error) {
       console.error(error);
     }
@@ -188,8 +199,16 @@ export default function ProductList() {
     fetchProducts();
   }, []);
 
+  // messageが変更されたときにvisibleを更新
+  useEffect(() => {
+    setVisible(message !== null && message.trim() !== '');
+  }, [message]);
+
   return (
     <main className="flex-grow p-4">
+      <Alert severity={severity} visible={visible}>
+        {message}
+      </Alert>
       <h2 className="text-2xl font-bold mb-4">商品一覧</h2>
       <button
         className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
@@ -294,7 +313,7 @@ export default function ProductList() {
                       className="bg-green-500 text-white py-2 px-4 rounded"
                       onClick={handleSaveClick}
                     >
-                      保存
+                      更新
                     </button>
                   </td>
                   <td className="py-2 px-4 border-b">
