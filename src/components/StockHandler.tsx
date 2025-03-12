@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Severity } from './Alert';
+import type { Severity } from "@/components/Alert";
+import { useState } from "react";
 
 interface Product {
   id: number;
@@ -13,22 +13,19 @@ interface Product {
 interface StockHandlerProps {
   product: Product;
   onSuccess: () => void;
-  setSeverity: (severity: Severity) => void;
-  setMessage: (message: string) => void;
+  showAlert: (msg: string, sev: Severity) => void;
 }
 
 export default function StockHandler({
   product,
   onSuccess,
-  setSeverity,
-  setMessage,
+  showAlert,
 }: StockHandlerProps) {
   const [quantity, setQuantity] = useState(0);
 
   const handleSubmit = async (actionType: string) => {
     if (quantity <= 0) {
-      setSeverity('error');
-      setMessage('数量は0より大きい整数でなければなりません');
+      showAlert("数量は0より大きい整数でなければなりません", "error");
       return;
     }
 
@@ -38,22 +35,20 @@ export default function StockHandler({
       quantity: quantity,
     };
 
-    const res = await fetch('http://localhost:3000/api/inventories', {
-      method: 'POST',
+    const res = await fetch("http://localhost:3000/api/inventories", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(history),
     });
 
     if (res.ok) {
-      setSeverity('success');
-      setMessage('在庫処理が完了しました');
+      showAlert("在庫処理が完了しました", "success");
       setQuantity(0); // 在庫処理の数量を初期化
       onSuccess(); // 在庫履歴を更新するためのコールバック関数を呼び出す
     } else {
-      setSeverity('error');
-      setMessage('エラーが発生しました');
+      showAlert("エラーが発生しました", "error");
     }
   };
 
@@ -87,14 +82,14 @@ export default function StockHandler({
           <button
             type="button"
             className="bg-green-500 text-white py-2 px-4 rounded"
-            onClick={() => handleSubmit('仕入れ')}
+            onClick={() => handleSubmit("仕入れ")}
           >
             商品を仕入れる
           </button>
           <button
             type="button"
             className="bg-green-500 text-white py-2 px-4 rounded"
-            onClick={() => handleSubmit('卸し')}
+            onClick={() => handleSubmit("卸し")}
           >
             商品を卸す
           </button>

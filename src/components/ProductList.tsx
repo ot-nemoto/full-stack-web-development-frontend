@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Alert, { Severity } from './Alert';
+import Alert from "@/components/Alert";
+import { useAlert } from "@/hooks/useAlert";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface Product {
   id: number | null;
@@ -19,22 +20,20 @@ export default function ProductList() {
   // 新規商品情報
   const [newProduct, setNewProduct] = useState<Product>({
     id: null,
-    name: '',
+    name: "",
     price: 0,
-    description: '',
+    description: "",
   });
   // 編集モードの管理
   const [editProductId, setEditProductId] = useState<number | null>(null);
   const [editProduct, setEditProduct] = useState<Product>({
     id: null,
-    name: '',
+    name: "",
     price: 0,
-    description: '',
+    description: "",
   });
-  // Alertコンポーネントのための状態
-  const [message, setMessage] = useState<string | null>(null);
-  const [severity, setSeverity] = useState<Severity>('info');
-  const [visible, setVisible] = useState(false);
+  // Alertカスタムフック
+  const { message, severity, visible, showAlert } = useAlert();
 
   // 商品追加ボタンクリック時の処理
   const handleAddProductClick = () => {
@@ -64,33 +63,33 @@ export default function ProductList() {
     setShowForm(false);
     setNewProduct({
       id: null,
-      name: '',
+      name: "",
       price: 0,
-      description: '',
+      description: "",
     });
   };
 
   // 商品追加フォームの登録ボタンクリック時の処理
   const handleRegisterClick = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/products', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/api/products", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newProduct),
       });
 
       if (!response.ok) {
-        throw new Error('商品登録に失敗しました');
+        throw new Error("商品登録に失敗しました");
       }
 
       const product = await response.json();
       setProducts((prevProducts) => [...prevProducts, product]);
       handleCancelClick(); // フォームをリセットして非表示にする
-      setMessage('商品を登録しました');
-      setSeverity('success');
+      showAlert("商品を登録しました", "success");
     } catch (error) {
+      showAlert("商品登録に失敗しました", "error");
       console.error(error);
     }
   };
@@ -99,27 +98,27 @@ export default function ProductList() {
   const handleDeleteClick = async (productId: number | null) => {
     if (productId === null) return;
 
-    const confirmDelete = window.confirm('本当にこの商品を削除しますか？');
+    const confirmDelete = window.confirm("本当にこの商品を削除しますか？");
     if (!confirmDelete) return;
 
     try {
       const response = await fetch(
         `http://localhost:3000/api/products/${productId}`,
         {
-          method: 'DELETE',
-        }
+          method: "DELETE",
+        },
       );
 
       if (!response.ok) {
-        throw new Error('商品削除に失敗しました');
+        throw new Error("商品削除に失敗しました");
       }
 
       setProducts((prevProducts) =>
-        prevProducts.filter((product) => product.id !== productId)
+        prevProducts.filter((product) => product.id !== productId),
       );
-      setMessage('商品を削除しました');
-      setSeverity('success');
+      showAlert("商品を削除しました", "success");
     } catch (error) {
+      showAlert("商品削除に失敗しました", "error");
       console.error(error);
     }
   };
@@ -141,7 +140,7 @@ export default function ProductList() {
 
   // 商品編集フォームの数値入力値変更時の処理
   const handleEditNumberInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { name, value } = e.target;
     setEditProduct((prevProduct) => ({
@@ -156,28 +155,28 @@ export default function ProductList() {
       const response = await fetch(
         `http://localhost:3000/api/products/${editProductId}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(editProduct),
-        }
+        },
       );
 
       if (!response.ok) {
-        throw new Error('商品更新に失敗しました');
+        throw new Error("商品更新に失敗しました");
       }
 
       const updatedProduct = await response.json();
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
-          product.id === updatedProduct.id ? updatedProduct : product
-        )
+          product.id === updatedProduct.id ? updatedProduct : product,
+        ),
       );
       setEditProductId(null); // 編集モードを解除
-      setMessage('商品を更新しました');
-      setSeverity('success');
+      showAlert("商品を更新しました", "success");
     } catch (error) {
+      showAlert("商品更新に失敗しました", "error");
       console.error(error);
     }
   };
@@ -185,9 +184,9 @@ export default function ProductList() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch("http://localhost:3000/api/products");
         if (!response.ok) {
-          throw new Error('商品一覧の取得に失敗しました');
+          throw new Error("商品一覧の取得に失敗しました");
         }
         const products = await response.json();
         setProducts(products);
@@ -199,11 +198,6 @@ export default function ProductList() {
     fetchProducts();
   }, []);
 
-  // messageが変更されたときにvisibleを更新
-  useEffect(() => {
-    setVisible(message !== null && message.trim() !== '');
-  }, [message]);
-
   return (
     <main className="flex-grow p-4">
       <Alert severity={severity} visible={visible}>
@@ -211,6 +205,7 @@ export default function ProductList() {
       </Alert>
       <h2 className="text-2xl font-bold mb-4">商品一覧</h2>
       <button
+        type="button"
         className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
         onClick={handleAddProductClick}
       >
@@ -223,14 +218,14 @@ export default function ProductList() {
             <th className="py-2 px-4 border-b">商品名</th>
             <th className="py-2 px-4 border-b">単価</th>
             <th className="py-2 px-4 border-b">説明</th>
-            <th className="py-2 px-4 border-b"></th>
-            <th className="py-2 px-4 border-b"></th>
+            <th className="py-2 px-4 border-b" />
+            <th className="py-2 px-4 border-b" />
           </tr>
         </thead>
         <tbody>
           {showForm && (
             <tr className="hover:bg-gray-50">
-              <td className="py-2 px-4 border-b"></td>
+              <td className="py-2 px-4 border-b" />
               <td className="py-2 px-4 border-b">
                 <input
                   type="text"
@@ -260,6 +255,7 @@ export default function ProductList() {
               </td>
               <td className="py-2 px-4 border-b">
                 <button
+                  type="button"
                   className="bg-green-500 text-white py-2 px-4 rounded"
                   onClick={handleRegisterClick}
                 >
@@ -268,6 +264,7 @@ export default function ProductList() {
               </td>
               <td className="py-2 px-4 border-b">
                 <button
+                  type="button"
                   className="bg-gray-500 text-white py-2 px-4 rounded"
                   onClick={handleCancelClick}
                 >
@@ -310,6 +307,7 @@ export default function ProductList() {
                   </td>
                   <td className="py-2 px-4 border-b">
                     <button
+                      type="button"
                       className="bg-green-500 text-white py-2 px-4 rounded"
                       onClick={handleSaveClick}
                     >
@@ -318,6 +316,7 @@ export default function ProductList() {
                   </td>
                   <td className="py-2 px-4 border-b">
                     <button
+                      type="button"
                       className="bg-gray-500 text-white py-2 px-4 rounded"
                       onClick={() => setEditProductId(null)}
                     >
@@ -341,12 +340,14 @@ export default function ProductList() {
                   </td>
                   <td className="py-2 px-4 border-b">
                     <button
+                      type="button"
                       className="bg-yellow-500 text-white py-2 px-4 rounded"
                       onClick={() => handleEditClick(product)}
                     >
                       編集
                     </button>
                     <button
+                      type="button"
                       className="bg-red-500 text-white py-2 px-4 rounded"
                       onClick={() => handleDeleteClick(product.id)}
                     >
