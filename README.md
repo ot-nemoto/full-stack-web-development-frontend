@@ -53,6 +53,11 @@ devcontainer 環境の場合、ソースコードの変更を検知出来ない�
 ## API モック対応
 
 API のモックとして、json-server を利用。
+
+```sh
+yarn add json-server --dev
+```
+
 yarn で起動させるために、`package.json` に以下の設定を追加。
 
 ```json
@@ -62,6 +67,53 @@ yarn で起動させるために、`package.json` に以下の設定を追加。
   }
 }
 ```
+
+## フォーマッタ
+
+```sh
+yarn add -D @biomejs/biome
+```
+
+```sh
+yarn biome init
+```
+
+biome.json
+
+```json
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": []
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  }
+}
+```
+
+- formatter.indentStyle: tab -> space
 
 ## 開発環境を起動
 
