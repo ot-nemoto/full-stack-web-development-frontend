@@ -1,7 +1,7 @@
 "use client";
 
 import Alert from "@/components/Alert";
-import StockHandler from "@/components/StockHandler";
+import StockAction from "@/components/StockAction";
 import StockHistory from "@/components/StockHistory";
 import { useAlert } from "@/hooks/useAlert";
 import { useCallback, useEffect, useState } from "react";
@@ -51,7 +51,7 @@ export default function ProductInventory({ productId }: ProductInventoryProps) {
         {message}
       </Alert>
       <h2 className="text-2xl font-bold mb-4">商品在庫</h2>
-      <StockHandler
+      <StockAction
         product={product}
         onSuccess={fetchHistories}
         showAlert={showAlert}
