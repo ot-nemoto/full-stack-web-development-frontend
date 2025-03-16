@@ -1,6 +1,6 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import ProductInventory from '@/components/ProductInventory';
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import StockMain from "@/components/StockMain";
 
 interface PageParams {
   id: string;
@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <ProductInventory productId={Number(id)} />
+      <StockMain productId={Number(id)} />
       <Footer />
     </div>
   );

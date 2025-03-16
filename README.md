@@ -55,7 +55,7 @@ devcontainer 環境の場合、ソースコードの変更を検知出来ない�
 API のモックとして、json-server を利用。
 
 ```sh
-yarn add json-server --dev
+yarn add -D json-server@0.17.4
 ```
 
 yarn で起動させるために、`package.json` に以下の設定を追加。
@@ -63,7 +63,7 @@ yarn で起動させるために、`package.json` に以下の設定を追加。
 ```json
 {
   "scripts": {
-    "json-server": "json-server --watch data.json --port 3001"
+    "json-server": "json-server --watch data.json --port 3001 --host 0.0.0.0"
   }
 }
 ```
@@ -132,7 +132,7 @@ yarn dev
 ```mermaid
 graph TD;
   page --> Header
-  page --> ProductList[ProductList<br>商品一覧]
+  page --> ProductMain[ProductMain<br>商品一覧]
   page --> Footer
 
 ```
@@ -142,9 +142,9 @@ graph TD;
 ```mermaid
 graph TD;
   page --> Header
-  page --> ProductInventory[ProductInventory<br>商品在庫]
-  ProductInventory --> StockHandler[StockHandler<br>在庫処理]
-  ProductInventory --> StockHistory[StockHistory<br>在庫履歴]
+  page --> StockMain[StockMain<br>商品在庫]
+  StockMain --> StockAction[StockAction<br>在庫処理]
+  StockMain --> StockHistory[StockHistory<br>在庫履歴]
   page --> Footer
 ```
 
