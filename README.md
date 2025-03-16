@@ -1,5 +1,17 @@
 # full-stack-web-development-frontend
 
+## devcontainer の設定
+
+```json
+{
+	"name": "frontend",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {}
+	}
+}
+```
+
 ```sh
 yarn --version
   # 1.22.22
@@ -14,7 +26,7 @@ node --version
 ```sh
 yarn create next-app frontend
 ✔ Would you like to use TypeScript? … No / [Yes]
-✔ Would you like to use ESLint? … No / [Yes]
+✔ Would you like to use ESLint? … [No] / Yes
 ✔ Would you like to use Tailwind CSS? … No / [Yes]
 ✔ Would you like your code inside a `src/` directory? … No / [Yes]
 ✔ Would you like to use App Router? (recommended) … No / [Yes]
@@ -28,8 +40,12 @@ yarn create next-app frontend
 >
 > ```sh
 > npx create-next-app@15.1.4 frontend --use-yarn
+> Need to install the following packages:
+> create-next-app@15.2.2
+> Ok to proceed? (y)
+>
 > ✔ Would you like to use TypeScript? … No / [Yes]
-> ✔ Would you like to use ESLint? … No / [Yes]
+> ✔ Would you like to use ESLint? … [No] / Yes
 > ✔ Would you like to use Tailwind CSS? … No / [Yes]
 > ✔ Would you like your code inside a `src/` directory? … No / [Yes]
 > ✔ Would you like to use App Router? (recommended) … No / [Yes]
@@ -37,38 +53,14 @@ yarn create next-app frontend
 > ✔ Would you like to customize the import alias (`@/*` by default)? … [No] / Yes
 > ```
 
-## ホットリロード対応
+```
+mv frontend/* .
+mv frontend/.* .
 
-devcontainer 環境の場合、ソースコードの変更を検知出来ない場合があるため、WATCHPACK_POLLING 環境変数を設定。<br>
-また、turbopack によるビルドでは検知できなかったため、無効（webpack）で実行させるように設定を変更。
-
-```json
-{
-  "scripts": {
-    "dev": "WATCHPACK_POLLING=true next dev"
-  }
-}
+rm -r frontend
 ```
 
-## API モック対応
-
-API のモックとして、json-server を利用。
-
-```sh
-yarn add -D json-server@0.17.4
-```
-
-yarn で起動させるために、`package.json` に以下の設定を追加。
-
-```json
-{
-  "scripts": {
-    "json-server": "json-server --watch data.json --port 3001 --host 0.0.0.0"
-  }
-}
-```
-
-## フォーマッタ
+## Formater / Lineter の設定
 
 ```sh
 yarn add -D @biomejs/biome
@@ -78,7 +70,7 @@ yarn add -D @biomejs/biome
 yarn biome init
 ```
 
-biome.json
+_biome.json_
 
 ```json
 {
@@ -113,7 +105,83 @@ biome.json
 }
 ```
 
-- formatter.indentStyle: tab -> space
+- formatter.indentStyleの `tab` を `space` に変更
+
+### フォーマットチェック
+
+```sh
+yarn biome format src/
+```
+
+### 構文チェック
+
+```sh
+yarn biome lint src/
+```
+
+### devcontainer.jsonの変更
+
+_.devcontainer/devcontaner.json_
+
+```json
+{
+  "name": "frontend",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "postCreateCommand": "yarn install",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome"],
+      "settings": {
+        "editor.defaultFormatter": "biomejs.biome",
+        "editor.formatOnSave": true, // 保存時に自動フォーマットを有効にする設定
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.tabSize": 2,
+        "files.trimTrailingWhitespace": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit" // 保存時にimport文の自動整形を有効にする設定
+        }
+      }
+    }
+  }
+}
+```
+
+## ホットリロード対応
+
+devcontainer 環境の場合、ソースコードの変更を検知出来ない場合があるため、WATCHPACK_POLLING 環境変数を設定。<br>
+また、turbopack によるビルドでは検知できなかったため、無効（webpack）で実行させるように設定を変更。
+
+```json
+{
+  "scripts": {
+    "dev": "WATCHPACK_POLLING=true next dev"
+  }
+}
+```
+
+## API モック対応
+
+API のモックとして、json-server を利用。
+
+```sh
+yarn add -D json-server@0.17.4
+```
+
+yarn で起動させるために、`package.json` に以下の設定を追加。
+
+```json
+{
+  "scripts": {
+    "json-server": "json-server --watch data.json --port 3001 --host 0.0.0.0"
+  }
+}
+```
 
 ## 開発環境を起動
 

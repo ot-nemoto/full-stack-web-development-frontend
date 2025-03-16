@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
-import { M_PLUS_Rounded_1c } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { M_PLUS_Rounded_1c } from "next/font/google";
+import "./globals.css";
 
 const mPlusRounded1c = M_PLUS_Rounded_1c({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: '在庫管理システム',
-  description: '実装で学ぶフルスタックWeb開発で作る「在庫管理システム」',
+  title: "在庫管理システム",
+  description: "実装で学ぶフルスタックWeb開発で作る「在庫管理システム」",
 };
 
 export default function RootLayout({
