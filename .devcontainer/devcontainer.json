@@ -5,5 +5,12 @@
   },
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "postCreateCommand": "yarn install",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["biomejs.biome"]
+    }
   }
 }
