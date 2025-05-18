@@ -1,30 +1,4 @@
-# full-stack-web-development-frontend
-
-## アプリケーションを作成する
-
-```sh
-yarn create next-app frontend --src-dir --yes
-```
-
-> yarn はデフォルトでは最新のバージョンのテンプレートを使用するので、以下のコマンドで環境を合わせる。<br>
-> この場合 `yarn create next-app` コマンドは不要。
->
-> ```sh
-> npx create-next-app@15.1.4 frontend --src-dir --use-yarn --yes
-> ```
-
-## ホットリロード対応
-
-devcontainer 環境の場合、ソースコードの変更を検知出来ない場合があるため、WATCHPACK_POLLING 環境変数を設定。<br>
-また、turbopack によるビルドでは検知できなかったため、無効（webpack）で実行させるように設定を変更。
-
-```json
-{
-  "scripts": {
-    "dev": "WATCHPACK_POLLING=true next dev"
-  }
-}
-```
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
