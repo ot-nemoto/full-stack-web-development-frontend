@@ -3,10 +3,14 @@
 import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [data, setData] = useState({ name: "初期値" });
+  const [data, setData] = useState({ name: "" });
 
   useEffect(() => {
-    setData({ name: "変更" });
+    fetch("/api/hello")
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      });
   }, []);
 
   return <div>hello {data.name}!</div>;
