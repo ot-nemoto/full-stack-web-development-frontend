@@ -74,9 +74,7 @@ export default function Page() {
                 </button>
               </td>
             </tr>
-          ) : (
-            ""
-          )}
+          ) : null}
           {data.map((data: ProductData) => (
             <tr key={data.id}>
               <td>{data.id}</td>
