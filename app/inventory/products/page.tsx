@@ -87,9 +87,7 @@ export default function Page() {
                 </button>
               </td>
             </tr>
-          ) : (
-            ""
-          )}
+          ) : null}
           {data.map((data: ProductData) =>
             editingRow === data.id ? (
               <tr key={data.id}>
