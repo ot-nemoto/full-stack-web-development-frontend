@@ -18,10 +18,28 @@ export default function Page() {
     setData(productsData as ProductData[]);
   }, []);
 
+  // 新規登録処理、新規登録行の表示状態を保持
+  const [shownNewRow, setShownNewRow] = useState(false);
+  const handleShowNewRow = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setShownNewRow(true);
+  };
+  const handleAddCancel = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setShownNewRow(false);
+  };
+  const handleAdd = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    // バックエンドを使用した登録処理を呼ぶ
+    setShownNewRow(false);
+  };
+
   return (
     <>
       <h2>商品一覧</h2>
-      <button type="button">商品を追加する</button>
+      <button type="button" onClick={handleShowNewRow}>
+        商品を追加する
+      </button>
       <table>
         <thead>
           <tr>
@@ -34,6 +52,29 @@ export default function Page() {
           </tr>
         </thead>
         <tbody>
+          {shownNewRow ? (
+            <tr>
+              <td />
+              <td>
+                <input type="text" />
+              </td>
+              <td>
+                <input type="number" />
+              </td>
+              <td>
+                <input type="text" />
+              </td>
+              <td />
+              <td>
+                <button type="button" onClick={handleAddCancel}>
+                  キャンセル
+                </button>
+                <button type="button" onClick={handleAdd}>
+                  登録する
+                </button>
+              </td>
+            </tr>
+          ) : null}
           {data.map((data: ProductData) => (
             <tr key={data.id}>
               <td>{data.id}</td>
