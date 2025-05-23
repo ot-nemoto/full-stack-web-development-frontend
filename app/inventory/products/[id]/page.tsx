@@ -10,7 +10,7 @@ export default function Page() {
         </div>
         <div>
           <label htmlFor="quantity">数量:</label>
-          <input type="text" id="quantity" />
+          <input type="number" id="quantity" />
         </div>
         <button type="submit">商品を仕入れる</button>
         <button type="submit">商品を卸す</button>
