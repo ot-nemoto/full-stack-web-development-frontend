@@ -1,6 +1,7 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import inventoriesData from "../sample/dummy_inventories.json";
 import productsData from "../sample/dummy_products.json";
 type ProductData = {
@@ -20,9 +21,9 @@ type InventoryData = {
   inventory: number;
 };
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
-  // paramsをアンラップ(展開)
-  const id = Number(use(params).id);
+export default function Page() {
+  const params = useParams<{ id: string }>();
+  const id = Number(params?.id);
 
   // 読込データを保持
   const [product, setProduct] = useState<ProductData>({
