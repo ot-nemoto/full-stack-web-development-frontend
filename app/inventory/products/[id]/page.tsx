@@ -35,7 +35,7 @@ export default function Page() {
 
   useEffect(() => {
     const selectedProduct: ProductData = productsData.find(
-      (v) => v.id == params.id,
+      (v) => v.id === params.id,
     ) ?? {
       id: 0,
       name: "",
