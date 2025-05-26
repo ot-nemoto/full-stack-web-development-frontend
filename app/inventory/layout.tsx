@@ -9,7 +9,7 @@ export default function InventoryLayout({
     <div className={styles.layout}>
       <header className={styles.header}>ヘッダー</header>
       <div className={styles.container}>
-        <aside className={styles.navbar}>サイドバー</aside>
+        <nav className={styles.navbar}>サイドバー</nav>
         <main className={styles.content}>
           <section>{children}</section>
         </main>
