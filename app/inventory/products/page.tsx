@@ -1,5 +1,21 @@
 "use client";
 
+import AddIcon from "@mui/icons-material/Add";
+import type { AlertColor } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Paper,
+  Snackbar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,6 +38,18 @@ export default function Page() {
 
   // 読込データを保持
   const [data, setData] = useState<Array<ProductData>>([]);
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState<AlertColor>("success");
+  const [message, setMessage] = useState("");
+  const result = (severity: AlertColor, message: string) => {
+    setOpen(true);
+    setSeverity(severity);
+    setMessage(message);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     setData(productsData as ProductData[]);
@@ -74,6 +102,7 @@ export default function Page() {
     setId(0);
   };
   const handleAdd = (data: ProductData) => {
+    result("success", "商品が登録されました");
     console.log("handleAdd", data);
     setId(0);
   };
@@ -96,83 +125,51 @@ export default function Page() {
     setId(0);
   };
   const handleEdit = (data: ProductData) => {
+    result("success", "商品が更新されました");
     console.log("handleEdit", data);
     setId(0);
   };
   const handleDelete = (id: number) => {
+    result("success", "商品が削除されました");
     console.log("handleDelete", id);
     setId(0);
   };
 
   return (
     <>
-      <h2>商品一覧</h2>
-      <button type="button" onClick={handleShowNewRow}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert severity={severity}>{message}</Alert>
+      </Snackbar>
+      <Typography variant="h5">商品一覧</Typography>
+      <Button
+        variant="contained"
+        startIcon={<AddIcon />}
+        onClick={() => handleShowNewRow()}
+      >
         商品を追加する
-      </button>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <table>
-          <thead>
-            <tr>
-              <th>商品ID</th>
-              <th>商品名</th>
-              <th>単価</th>
-              <th>説明</th>
-              <th />
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {id === null ? (
-              <tr>
-                <td />
-                <td>
-                  <input
-                    type="text"
-                    id="name"
-                    {...register("name", { required: true, maxLength: 100 })}
-                  />
-                  {errors.name && (
-                    <div>100文字以内の商品名を入力してください</div>
-                  )}
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    id="price"
-                    {...register("price", {
-                      required: true,
-                      min: 1,
-                      max: 99999999,
-                    })}
-                  />
-                  {errors.price && (
-                    <div>1から99999999の数値を入力してください</div>
-                  )}
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="description"
-                    {...register("description")}
-                  />
-                </td>
-                <td />
-                <td>
-                  <button type="button" onClick={() => handleAddCancel()}>
-                    キャンセル
-                  </button>
-                  <button type="submit" onClick={() => setAction("add")}>
-                    登録する
-                  </button>
-                </td>
-              </tr>
-            ) : null}
-            {data.map((data: ProductData) =>
-              id === data.id ? (
-                <tr key={data.id}>
-                  <td>{data.id}</td>
-                  <td>
+      </Button>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ height: 400, width: "100%" }}
+      >
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>商品ID</TableCell>
+                <TableCell>商品名</TableCell>
+                <TableCell>単価</TableCell>
+                <TableCell>説明</TableCell>
+                <TableCell />
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {id === null ? (
+                <TableRow>
+                  <TableCell />
+                  <TableCell>
                     <input
                       type="text"
                       id="name"
@@ -181,62 +178,112 @@ export default function Page() {
                     {errors.name && (
                       <div>100文字以内の商品名を入力してください</div>
                     )}
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <input
                       type="number"
                       id="price"
-                      {...register("price", { min: 1, max: 99999999 })}
+                      {...register("price", {
+                        required: true,
+                        min: 1,
+                        max: 99999999,
+                      })}
                     />
                     {errors.price && (
                       <div>1から99999999の数値を入力してください</div>
                     )}
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <input
                       type="text"
                       id="description"
                       {...register("description")}
                     />
-                  </td>
-                  <td />
-                  <td>
-                    <button type="button" onClick={() => handleEditCancel()}>
+                  </TableCell>
+                  <TableCell />
+                  <TableCell>
+                    <button type="button" onClick={() => handleAddCancel()}>
                       キャンセル
                     </button>
-                    <button type="submit" onClick={() => setAction("update")}>
-                      更新する
+                    <button type="submit" onClick={() => setAction("add")}>
+                      登録する
                     </button>
-                    <button type="submit" onClick={() => setAction("delete")}>
-                      削除する
-                    </button>
-                  </td>
-                </tr>
-              ) : (
-                <tr key={data.id}>
-                  <td>{data.id}</td>
-                  <td>{data.name}</td>
-                  <td>{data.price}</td>
-                  <td>{data.description}</td>
-                  <td>
-                    <Link href={`/inventory/products/${data.id}`}>
-                      在庫処理
-                    </Link>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleEditRow(data.id)}
-                    >
-                      更新・削除
-                    </button>
-                  </td>
-                </tr>
-              ),
-            )}
-          </tbody>
-        </table>
-      </form>
+                  </TableCell>
+                </TableRow>
+              ) : null}
+              {data.map((data: ProductData) =>
+                id === data.id ? (
+                  <TableRow key={data.id}>
+                    <TableCell>{data.id}</TableCell>
+                    <TableCell>
+                      <input
+                        type="text"
+                        id="name"
+                        {...register("name", {
+                          required: true,
+                          maxLength: 100,
+                        })}
+                      />
+                      {errors.name && (
+                        <div>100文字以内の商品名を入力してください</div>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <input
+                        type="number"
+                        id="price"
+                        {...register("price", { min: 1, max: 99999999 })}
+                      />
+                      {errors.price && (
+                        <div>1から99999999の数値を入力してください</div>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <input
+                        type="text"
+                        id="description"
+                        {...register("description")}
+                      />
+                    </TableCell>
+                    <TableCell />
+                    <TableCell>
+                      <button type="button" onClick={() => handleEditCancel()}>
+                        キャンセル
+                      </button>
+                      <button type="submit" onClick={() => setAction("update")}>
+                        更新する
+                      </button>
+                      <button type="submit" onClick={() => setAction("delete")}>
+                        削除する
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  <TableRow key={data.id}>
+                    <TableCell>{data.id}</TableCell>
+                    <TableCell>{data.name}</TableCell>
+                    <TableCell>{data.price}</TableCell>
+                    <TableCell>{data.description}</TableCell>
+                    <TableCell>
+                      <Link href={`/inventory/products/${data.id}`}>
+                        在庫処理
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <button
+                        type="button"
+                        onClick={() => handleEditRow(data.id)}
+                      >
+                        更新・削除
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ),
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </>
   );
 }
