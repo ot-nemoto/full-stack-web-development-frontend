@@ -1,11 +1,18 @@
 "use client";
 
-import AddIcon from "@mui/icons-material/Add";
+import {
+  Add as AddIcon,
+  Cancel as CancelIcon,
+  Check as CheckIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+} from "@mui/icons-material";
 import type { AlertColor } from "@mui/material";
 import {
   Alert,
   Box,
   Button,
+  IconButton,
   Paper,
   Snackbar,
   Table,
@@ -14,12 +21,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import productsData from "./sample/dummy_products.json";
+
+type FormInput = {
+  name: string;
+  price: number | string;
+  description: string;
+};
 
 type ProductData = {
   id: number | null;
@@ -58,12 +72,6 @@ export default function Page() {
   const [id, setId] = useState<number | null>(0);
   // submit時のactionを分岐させる
   const [action, setAction] = useState<string>("");
-  type FormInput = {
-    name: string;
-    price: number | string;
-    description: string;
-  };
-
   const onSubmit = (event: FormInput): void => {
     const data: ProductData = {
       id: id,
@@ -102,8 +110,8 @@ export default function Page() {
     setId(0);
   };
   const handleAdd = (data: ProductData) => {
-    result("success", "商品が登録されました");
     console.log("handleAdd", data);
+    result("success", "商品が登録されました");
     setId(0);
   };
 
@@ -125,13 +133,13 @@ export default function Page() {
     setId(0);
   };
   const handleEdit = (data: ProductData) => {
-    result("success", "商品が更新されました");
     console.log("handleEdit", data);
+    result("success", "商品が更新されました");
     setId(0);
   };
   const handleDelete = (id: number) => {
-    result("success", "商品が削除されました");
     console.log("handleDelete", id);
+    result("success", "商品が削除されました");
     setId(0);
   };
 
@@ -170,31 +178,41 @@ export default function Page() {
                 <TableRow>
                   <TableCell />
                   <TableCell>
-                    <input
+                    <TextField
                       type="text"
                       id="name"
-                      {...register("name", { required: true, maxLength: 100 })}
+                      {...register("name", {
+                        required: "必須入力です。",
+                        maxLength: {
+                          value: 100,
+                          message: "100文字以内の商品名を入力してください。",
+                        },
+                      })}
+                      error={Boolean(errors.name)}
+                      helperText={errors.name?.message?.toString() || ""}
                     />
-                    {errors.name && (
-                      <div>100文字以内の商品名を入力してください</div>
-                    )}
                   </TableCell>
                   <TableCell>
-                    <input
+                    <TextField
                       type="number"
                       id="price"
                       {...register("price", {
-                        required: true,
-                        min: 1,
-                        max: 99999999,
+                        required: "必須入力です。",
+                        min: {
+                          value: 1,
+                          message: "1から99999999の数値を入力してください",
+                        },
+                        max: {
+                          value: 99999999,
+                          message: "1から99999999の数値を入力してください",
+                        },
                       })}
+                      error={Boolean(errors.price)}
+                      helperText={errors.price?.message?.toString() || ""}
                     />
-                    {errors.price && (
-                      <div>1から99999999の数値を入力してください</div>
-                    )}
                   </TableCell>
                   <TableCell>
-                    <input
+                    <TextField
                       type="text"
                       id="description"
                       {...register("description")}
@@ -202,12 +220,21 @@ export default function Page() {
                   </TableCell>
                   <TableCell />
                   <TableCell>
-                    <button type="button" onClick={() => handleAddCancel()}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<CancelIcon />}
+                      onClick={() => handleAddCancel()}
+                    >
                       キャンセル
-                    </button>
-                    <button type="submit" onClick={() => setAction("add")}>
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      startIcon={<CheckIcon />}
+                      onClick={() => setAction("add")}
+                    >
                       登録する
-                    </button>
+                    </Button>
                   </TableCell>
                 </TableRow>
               ) : null}
@@ -247,15 +274,29 @@ export default function Page() {
                     </TableCell>
                     <TableCell />
                     <TableCell>
-                      <button type="button" onClick={() => handleEditCancel()}>
+                      <Button
+                        variant="outlined"
+                        startIcon={<CancelIcon />}
+                        onClick={() => handleEditCancel()}
+                      >
                         キャンセル
-                      </button>
-                      <button type="submit" onClick={() => setAction("update")}>
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        startIcon={<CheckIcon />}
+                        onClick={() => setAction("update")}
+                      >
                         更新する
-                      </button>
-                      <button type="submit" onClick={() => setAction("delete")}>
-                        削除する
-                      </button>
+                      </Button>
+                      <IconButton
+                        aria-label="削除する"
+                        type="submit"
+                        color="warning"
+                        onClick={() => setAction("delete")}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -270,12 +311,13 @@ export default function Page() {
                       </Link>
                     </TableCell>
                     <TableCell>
-                      <button
-                        type="button"
+                      <IconButton
+                        aria-label="編集する"
+                        color="primary"
                         onClick={() => handleEditRow(data.id)}
                       >
-                        更新・削除
-                      </button>
+                        <EditIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ),
