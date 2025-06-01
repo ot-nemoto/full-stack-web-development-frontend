@@ -74,6 +74,36 @@ export default function Page() {
       });
   };
 
+  const [fileAsync, setFileAsync] = useState<File | null>(null);
+  const onChangeFileAsync = (newFile: File | null) => {
+    setFileAsync(newFile);
+  };
+
+  const doAddAsync = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!fileAsync) {
+      result("error", "ファイルを選択してください");
+      return;
+    }
+
+    const params = {
+      file: fileAsync,
+    };
+    axios
+      .post("http://localhost:8000/api/inventory/async/", params, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        result("success", "非同期ファイルが登録されました");
+      })
+      .catch((error) => {
+        console.log(error);
+        result("error", "非同期ファイルの登録に失敗しました");
+      });
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -88,6 +118,13 @@ export default function Page() {
         <Typography variant="subtitle1">同期でファイル取込</Typography>
         <MuiFileInput value={fileSync} onChange={onChangeFileSync} />
         <Button variant="contained" onClick={doAddSync}>
+          登録
+        </Button>
+      </Box>
+      <Box m={2}>
+        <Typography variant="subtitle1">非同期でファイル取込</Typography>
+        <MuiFileInput value={fileAsync} onChange={onChangeFileAsync} />
+        <Button variant="contained" onClick={doAddAsync}>
           登録
         </Button>
       </Box>
