@@ -1,10 +1,23 @@
 "use client";
 
 import type { AlertColor } from "@mui/material";
-import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Paper,
+  Snackbar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { MuiFileInput } from "mui-file-input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const [open, setOpen] = useState(false);
@@ -15,6 +28,22 @@ export default function Page() {
     setSeverity(severity);
     setMessage(message);
   };
+  type MonthlySummary = {
+    monthly_date: string;
+    monthly_price: number;
+  };
+  const [monthlySummaries, setMonthlySummaries] = useState<MonthlySummary[]>(
+    [],
+  );
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/inventory/summary/")
+      .then((res) => res.data)
+      .then((data) => {
+        setMonthlySummaries(data);
+      });
+  }, []);
 
   const [fileSync, setFileSync] = useState<File | null>(null);
   const onChangeFileSync = (newFile: File | null) => {
@@ -61,6 +90,27 @@ export default function Page() {
         <Button variant="contained" onClick={doAddSync}>
           登録
         </Button>
+      </Box>
+      <Box m={2}>
+        <Typography variant="subtitle1">年月ごとの売上数集計</Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>処理月</TableCell>
+                <TableCell>合計数量</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {monthlySummaries.map((data: MonthlySummary) => (
+                <TableRow key={data.monthly_date}>
+                  <TableCell>{data.monthly_date}</TableCell>
+                  <TableCell>{data.monthly_price}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
     </Box>
   );
